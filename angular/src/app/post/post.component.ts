@@ -34,7 +34,11 @@ export class PostComponent {
   }
 
   createPost() {
-    let item: CreateUpdatePostDto;
+    let item: CreateUpdatePostDto = {
+      title: '',
+      content: '',
+      category: null
+    };
     this.buildForm(item); // add this line
     this.isModalOpen = true;
     this.editId = '';
