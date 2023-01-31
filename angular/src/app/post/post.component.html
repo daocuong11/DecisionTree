@@ -1,0 +1,78 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col col-md-6">
+        <h5 class="card-title">{{ '::Menu:Posts' | abpLocalization }}</h5>
+      </div>
+      <div class="text-end col col-md-6">
+
+        <!-- Add the "new book" button here -->
+        <div class="text-lg-end pt-2">
+          <button id="create" class="btn btn-primary" type="button" (click)="createPost()">
+            <i class="fa fa-plus mr-1"></i>
+            <span>{{ "::NewPost" | abpLocalization }}</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <ngx-datatable [rows]="posts.items" [count]="posts.totalCount" [list]="list" default>
+      <ngx-datatable-column [name]="'::Title' | abpLocalization" prop="title"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Category' | abpLocalization" prop="category">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ '::Enum:Category.' + row.category | abpLocalization }}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Edit' | abpLocalization">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <button class="btn btn-info" type="button" (click)="editPost(row)">
+            <span>{{ "::Edit" | abpLocalization }}</span>
+          </button>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+</div>
+
+<!-- Add the modal here -->
+<abp-modal [(visible)]="isModalOpen">
+  <ng-template #abpHeader>
+    <h3>{{ '::NewPost' | abpLocalization }}</h3>
+  </ng-template>
+
+  <ng-template #abpBody>
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="form-group">
+        <label for="title">Title</label><span> * </span>
+        <input type="text" id="title" class="form-control" formControlName="title" />
+      </div>
+
+      <div class="form-group">
+        <label for="category">Category</label><span> * </span>
+        <select class="form-control" id="category" formControlName="category">
+          <option [ngValue]="c.value" *ngFor="let c of categories"> {{ '::Enum:Category.' + c.value |
+            abpLocalization }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="content">Content</label><span> * </span>
+        <ngx-wig id="content" class="form-control" formControlName="content"></ngx-wig>
+      </div>
+
+
+    </form>
+  </ng-template>
+
+  <ng-template #abpFooter>
+    <button type="button" class="btn btn-secondary" abpClose>
+      {{ '::Close' | abpLocalization }}
+    </button>
+    <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
+      <i class="fa fa-check mr-1"></i>
+      {{ '::Save' | abpLocalization }}
+    </button>
+  </ng-template>
+</abp-modal>
